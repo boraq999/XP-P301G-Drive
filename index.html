@@ -12,7 +12,6 @@
 
         :root {
             --primary: #2563eb;
-            --success: #059669;
             --bg: #f8fafc;
         }
 
@@ -24,7 +23,6 @@
             min-height: 100vh;
         }
 
-        /*Sidebar*/
         .sidebar {
             width: 280px;
             background: #1e293b;
@@ -34,7 +32,6 @@
             flex-direction: column;
         }
 
-        /*Main Content*/
         .main {
             flex: 1;
             padding: 2rem;
@@ -50,28 +47,139 @@
             padding: 1.5rem;
         }
 
-        /*Invoice Preview Styling*/
+        /* Native Thermal Layout (Matched to Image) */
         #invoice-to-print {
-            width: 72mm;
-            background: white;
+            width: 272px;
+            /* 72mm @ 96dpi */
+            background: #fff;
             margin: 0 auto;
-            padding: 5mm;
-            color: black;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 12px;
+            color: #000;
+            box-sizing: border-box;
             font-family: 'Arial', sans-serif;
-            /* للطابعة يفضل خطوط بسيطة */
+            font-size: 13px;
         }
 
+        .inv-header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .inv-comp-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .inv-title-box {
+            background: #111;
+            color: #fff;
+            display: inline-block;
+            padding: 4px 20px;
+            font-weight: bold;
+            font-size: 15px;
+            margin-top: 5px;
+        }
+
+        .inv-info {
+            margin-top: 15px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .inv-info-row {
+            display: flex;
+            justify-content: space-between;
+            direction: rtl;
+        }
+
+        .info-label {
+            width: 85px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .info-val {
+            flex: 1;
+            text-align: right;
+        }
+
+        .dotted-line {
+            border-top: 1px dotted #000;
+            margin: 10px 0;
+        }
+
+        .inv-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .inv-table th {
+            font-size: 12px;
+            padding: 5px 0;
+            border-bottom: 1px solid #000;
+        }
+
+        .inv-table td {
+            padding: 7px 0;
+            vertical-align: top;
+            font-size: 15px;
+        }
+
+        .col-p {
+            width: 140px;
+            text-align: right;
+            word-wrap: break-word;
+        }
+
+        .col-q {
+            width: 40px;
+            text-align: center;
+        }
+
+        .col-t {
+            width: 72px;
+            text-align: left;
+        }
+
+        .inv-summary {
+            margin-top: 10px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 3px 0;
+        }
+
+        .inv-total-final {
+            border-top: 1px solid #000;
+            margin-top: 8px;
+            padding-top: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .inv-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 11px;
+            line-height: 1.6;
+            padding-bottom: 20px;
+        }
+
+        /* Dashboard Styles */
         .btn {
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             border: none;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 0.5rem;
         }
 
@@ -82,18 +190,12 @@
 
         .btn-primary:hover {
             background: #1d4ed8;
-            transform: translateY(-1px);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
         }
 
         .status-badge {
             padding: 0.25rem 0.75rem;
             border-radius: 9999px;
             font-size: 0.875rem;
-            font-weight: 500;
         }
 
         .status-online {
@@ -105,38 +207,6 @@
             background: #fee2e2;
             color: #991b1b;
         }
-
-        /* Invoice Elements (Same as our template but for preview) */
-        .inv-header {
-            text-align: center;
-            border-bottom: 1px dashed #000;
-            padding-bottom: 3mm;
-            margin-bottom: 3mm;
-        }
-
-        .inv-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .inv-table th {
-            text-align: right;
-            border-bottom: 1px solid #000;
-            padding: 1mm 0;
-            font-size: 9pt;
-        }
-
-        .inv-table td {
-            padding: 1.5mm 0;
-            font-size: 8.5pt;
-        }
-
-        .inv-total {
-            border-top: 2px solid #000;
-            margin-top: 2mm;
-            padding-top: 2mm;
-            font-weight: bold;
-        }
     </style>
 </head>
 
@@ -144,177 +214,105 @@
 
     <div class="sidebar">
         <h2 style="color: #38bdf8;">نظام المبيعات</h2>
-        <div style="margin-top: auto;">
-            <div id="printer-status" class="status-badge status-offline">جاري الاتصال بـ QZ...</div>
-        </div>
+        <div id="printer-status" class="status-badge status-offline">جاري الاتصال...</div>
     </div>
 
     <div class="main">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="margin:0;">إدارة الفواتير</h1>
+            <h1 style="margin:0;">تجهيز الفاتورة</h1>
             <button class="btn btn-primary" onclick="generateAndPrint()">
-                <span>🖨️ طباعة الفاتورة الآن</span>
+                <span>🖨️ طباعة الفاتورة</span>
             </button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-            <!-- Left: Settings -->
+        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem;">
             <div class="card">
-                <h3>بيانات الفاتورة</h3>
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <div>
-                        <label>رقم الفاتورة:</label>
-                        <input type="text" value="#INV-2026/001"
-                            style="width:100%; padding:0.5rem; margin-top:0.25rem;">
-                    </div>
-                    <div>
-                        <label>المسوق:</label>
-                        <input type="text" value="صمام العالم" style="width:100%; padding:0.5rem; margin-top:0.25rem;">
-                    </div>
-                    <p style="color: #64748b; font-size: 0.875rem;">
-                        * سيتم تحويل هذا التصميم إلى صورة عالية الدقة وإرسالها للطابعة كنظام RAW لضمان أفضل جودة.
-                    </p>
+                <h3>معاينة حية</h3>
+                <p>تم ضبط التصميم ليطابق النموذج المصور تماماً.</p>
+                <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #64748b;">
+                    * العرض: 80mm<br>
+                    * دقة الطباعة الحرارية: 1:1
                 </div>
             </div>
 
-            <!-- Right: Preview -->
-            <div class="card"
-                style="display: flex; align-items: flex-start; justify-content: center; background: #e2e8f0;">
+            <div class="card" style="background: #cbd5e1; display: flex; justify-content: center; padding: 30px;">
                 <div id="invoice-to-print">
                     <div class="inv-header">
-                        <strong style="font-size: 14pt;">شركة المتفوقون الأوائل</strong><br>
-                        <span>فاتورة مبيعات معتمدة</span>
+                        <div class="inv-comp-name">شركة المتفوقون الأوائل</div>
+                        <div class="inv-title-box">فاتورة مبيعات</div>
                     </div>
 
-                    <div style="font-size: 8.5pt; margin-bottom: 3mm;">
-                        <span>رقم: #INV-2026/0042</span><br>
-                        <span>التاريخ: 2026-02-27</span><br>
-                        <span>المتجر: تاج مول - طرابلس</span>
+                    <div class="inv-info">
+                        <div class="inv-info-row"><span class="info-label">رقم الفاتورة:</span> <span
+                                class="info-val">INV-2026/0042</span></div>
+                        <div class="inv-info-row"><span class="info-label">التاريخ:</span> <span
+                                class="info-val">2026-02-27</span></div>
+                        <div class="inv-info-row"><span class="info-label">المتجر:</span> <span class="info-val">تاج مول
+                                - فرع طرابلس</span></div>
+                        <div class="inv-info-row"><span class="info-label">المسوق:</span> <span class="info-val">صمام
+                                العالم</span></div>
                     </div>
+
+                    <div class="dotted-line"></div>
 
                     <table class="inv-table">
                         <thead>
                             <tr>
-                                <th>المنتج</th>
-                                <th style="text-align:center">كمية</th>
-                                <th style="text-align:left">إجمالي</th>
+                                <th class="col-p">المنتج</th>
+                                <th class="col-q">الكمية</th>
+                                <th class="col-t">الإجمالي</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>أكواب بلاستيك أبيض</td>
-                                <td style="text-align:center">10</td>
-                                <td style="text-align:left">110.0</td>
+                                <td class="col-p">أكواب بلاستيك أبيض (نخب أول)</td>
+                                <td class="col-q">2</td>
+                                <td class="col-t">220.00</td>
                             </tr>
                             <tr>
-                                <td>أكواب بلاستيك أزرق</td>
-                                <td style="text-align:center">5</td>
-                                <td style="text-align:left">135.0</td>
+                                <td class="col-p">أكواب بلاستيك أزرق مميز</td>
+                                <td class="col-q">1</td>
+                                <td class="col-t">135.00</td>
                             </tr>
                             <tr>
-                                <td>حافظة طعام 60*110</td>
-                                <td style="text-align:center">2</td>
-                                <td style="text-align:left">100.0</td>
+                                <td class="col-p">حافظة طعام حرارية 60*110</td>
+                                <td class="col-q">3</td>
+                                <td class="col-t">150.00</td>
                             </tr>
                             <tr>
-                                <td>أكواب نسكافيه ورق</td>
-                                <td style="text-align:center">20</td>
-                                <td style="text-align:left">400.0</td>
+                                <td class="col-p">أكواب نسكافيه ورق متين</td>
+                                <td class="col-q">10</td>
+                                <td class="col-t">1900.00</td>
                             </tr>
                             <tr>
-                                <td>منتج تجريبي رقم 1</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">10.0</td>
+                                <td class="col-p">منتج تجريبي إضافي 1</td>
+                                <td class="col-q">1</td>
+                                <td class="col-t">10.00</td>
                             </tr>
                             <tr>
-                                <td>منتج تجريبي رقم 2</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">15.0</td>
+                                <td class="col-p">منتج تجريبي إضافي 2</td>
+                                <td class="col-q">3</td>
+                                <td class="col-t">50.00</td>
                             </tr>
                             <tr>
-                                <td>منتج تجريبي رقم 3</td>
-                                <td style="text-align:center">3</td>
-                                <td style="text-align:left">30.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 4</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">12.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 5</td>
-                                <td style="text-align:center">2</td>
-                                <td style="text-align:left">24.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 6</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">50.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 7</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">45.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 8</td>
-                                <td style="text-align:center">10</td>
-                                <td style="text-align:left">100.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 9</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">20.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 10</td>
-                                <td style="text-align:center">2</td>
-                                <td style="text-align:left">40.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 11</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">15.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 12</td>
-                                <td style="text-align:center">3</td>
-                                <td style="text-align:left">45.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 13</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">10.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 14</td>
-                                <td style="text-align:center">5</td>
-                                <td style="text-align:left">25.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 15</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">100.0</td>
-                            </tr>
-                            <tr>
-                                <td>منتج تجريبي رقم 16</td>
-                                <td style="text-align:center">1</td>
-                                <td style="text-align:left">15.0</td>
+                                <td class="col-p">منتج تجريبي إضافي 3</td>
+                                <td class="col-q">1</td>
+                                <td class="col-t">10.00</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <div class="inv-total">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span>الإجمالي النهائي:</span>
-                            <span>745.00 د.ل</span>
-                        </div>
+                    <div class="inv-summary">
+                        <div class="summary-row"><span>المجموع الفرعي:</span> <span>2475.00 د.ل</span></div>
+                        <div class="summary-row"><span>الضريبة:</span> <span>0.00 د.ل</span></div>
+                        <div class="inv-total-final"><span>الإجمالي النهائي:</span> <span>2475.00 د.ل</span></div>
                     </div>
 
-                    <div
-                        style="text-align:center; margin-top: 5mm; font-size: 8pt; border-top: 1px dashed #000; padding-top: 2mm;">
-                        شكراً لتعاملكم معنا<br>
-                        www.almotafaweqon.ly
+                    <div class="inv-footer">
+                        <div class="dotted-line"></div>
+                        <div style="font-weight: bold; font-size: 14px; margin-bottom: 5px;">شكراً لثقتكم بنا</div>
+                        <div>يرجى الاحتفاظ بالفاتورة للاسترجاع</div>
+                        <div>هاتف: 0910000000</div>
                     </div>
                 </div>
             </div>
@@ -324,7 +322,6 @@
     <script>
         const PRINTER_NAME = "XP-P301G";
 
-        // الاتصال التلقائي بـ QZ Tray
         window.onload = async () => {
             const status = document.getElementById('printer-status');
             try {
@@ -333,53 +330,43 @@
                 status.className = "status-badge status-online";
                 qz.security.setCertificatePromise((res) => res());
             } catch (e) {
-                status.innerText = "❌ الطابعة غير متصلة (افتح QZ Tray)";
+                status.innerText = "❌ افتح QZ Tray";
                 status.className = "status-badge status-offline";
             }
         };
 
         async function generateAndPrint() {
             const status = document.getElementById('printer-status');
-            const invoiceElement = document.getElementById('invoice-to-print');
+            const el = document.getElementById('invoice-to-print');
 
             try {
                 status.innerText = "⏳ جاري المعالجة...";
 
-                // 1. تحويل الـ HTML إلى صورة عالية الدقة داخل المتصفح
-                const canvas = await html2canvas(invoiceElement, {
-                    scale: 3, // لضمان حدة النص
-                    useCORS: true
+                const canvas = await html2canvas(el, {
+                    scale: 2,
+                    useCORS: true,
+                    width: 272,
+                    backgroundColor: "#ffffff"
                 });
 
-                // 2. تحويل الصورة إلى Base64
                 const base64Image = canvas.toDataURL("image/png").split(',')[1];
-
-                // 3. إعداد الطابعة (وضع Continuous)
                 const config = qz.configs.create(PRINTER_NAME);
 
-                // 4. إرسال الصورة كأوامر RAW ESC/POS (الحل اللي نجح معانا)
                 const data = [{
                     type: 'raw',
                     format: 'image',
                     flavor: 'base64',
                     data: base64Image,
-                    options: {
-                        language: "ESCPOS",
-                        dotDensity: "double"
-                    }
+                    options: { language: "ESCPOS", dotDensity: "double" }
                 }];
 
                 await qz.print(config, data);
-                status.innerText = "✅ تم الطباعة بنجاح!";
-
-                setTimeout(() => {
-                    status.innerText = "✅ متصل بالطابعة";
-                    status.className = "status-badge status-online";
-                }, 3000);
+                status.innerText = "✅ تم الإرسال";
+                setTimeout(() => { status.innerText = "✅ متصل بالطابعة"; }, 3000);
 
             } catch (e) {
                 console.error(e);
-                alert("خطأ أثناء الطباعة: " + e.message);
+                alert("خطأ: " + e.message);
                 status.innerText = "❌ حدث خطأ";
             }
         }
