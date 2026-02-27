@@ -1,0 +1,13 @@
+{
+  "name": "thermal-invoice-generator",
+  "version": "1.0.0",
+  "description": "Generate thermal printer PDF invoices",
+  "main": "generate.js",
+  "dependencies": {
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-usb": "^3.0.0-alpha.4",
+    "puppeteer": "^22.15.0",
+    "qz-tray": "^2.2.5",
+    "ws": "^8.19.0"
+  }
+}
